@@ -32,6 +32,9 @@ def create_app():
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    from .chatbot import chatbot as chatbot_blueprint
+    app.register_blueprint(chatbot_blueprint)
+
     with app.app_context():
         db.create_all()
 

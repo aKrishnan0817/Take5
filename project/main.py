@@ -15,6 +15,7 @@ def mission():
     return render_template("mission.html",title= "Our Mission")
 
 
+
 @main.route('/profile')
 @login_required
 def profile():
@@ -29,6 +30,14 @@ def chooseSelfCare():
 @login_required
 def explo():
     return render_template('inspo.html', title="Explore Self Care")
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

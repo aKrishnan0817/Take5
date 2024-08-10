@@ -1,5 +1,6 @@
 .u-section-1 {
- background-image: none;
+ background-image: url("images/Screenshot2024-08-10at4.30.43PM.png");
+ background-position: 39.54% 50%;
 }
 
 .u-section-1 .u-sheet-1 {
@@ -36,6 +37,10 @@
 }
 
 @media (max-width: 575px) {
+ .u-section-1 .u-sheet-1 {
+   min-height: 666px;
+ }
+
  .u-section-1 .u-text-1 {
    font-size: 2.25rem;
  }
@@ -184,8 +189,8 @@
 }
 
 @media (max-width: 1199px) {
- .u-section-2 .u-sheet-1 {
-   min-height: 721px;
+ .u-section-2 .u-layout-wrap-1 {
+   margin-bottom: 36px;
  }
 
  .u-section-2 .u-layout-cell-1 {
@@ -218,7 +223,11 @@
 
 @media (max-width: 991px) {
  .u-section-2 .u-sheet-1 {
-   min-height: 200px;
+   min-height: 223px;
+ }
+
+ .u-section-2 .u-layout-wrap-1 {
+   margin-bottom: -770px;
  }
 
  .u-section-2 .u-layout-cell-1 {
@@ -232,7 +241,11 @@
 
 @media (max-width: 767px) {
  .u-section-2 .u-sheet-1 {
-   min-height: 300px;
+   min-height: 234px;
+ }
+
+ .u-section-2 .u-layout-wrap-1 {
+   margin-bottom: -979px;
  }
 
  .u-section-2 .u-container-layout-1 {
@@ -280,6 +293,14 @@
 }
 
 @media (max-width: 575px) {
+ .u-section-2 .u-sheet-1 {
+   min-height: 134px;
+ }
+
+ .u-section-2 .u-layout-wrap-1 {
+   margin-bottom: -1149px;
+ }
+
  .u-section-2 .u-text-1 {
    font-size: 1.875rem;
  }
