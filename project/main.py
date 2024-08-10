@@ -1,5 +1,5 @@
 from flask import Flask,render_template
-from flask import Blueprint
+from flask import Blueprint,request
 from flask_login import login_required, current_user
 from . import db
 import os
@@ -18,23 +18,43 @@ def mission():
 
 
 
+
 @main.route('/profile')
 @login_required
 def profile():
-    current_user.selfCaresCompleted = "jack"
+    selfCaresCompleted= current_user.selfCaresCompleted
+    currentSelfCare= current_user.currentSelfCare
+
+    return render_template('profile.html', selfCaresCompleted=selfCaresCompleted,currentSelfCare=currentSelfCare)
+
+@main.route("/choose-self-care-get", methods=["GET", "POST"])
+@login_required
+def chat():
+    name = request.form["name"]
+    description = request.form["description"]
+    current_user.currentSelfCare = name + "-:-"+ description
     db.session.commit()
-    time=datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")
-    time2 = (datetime.datetime.now(datetime.UTC)+ timedelta(minutes = 5)).strftime("%Y%m%dT%H%M%SZ")
-    activityName = "Meditation"
-    activityDescription="Description"
-    return render_template('profile.html', selfCaresCompleted=current_user.selfCaresCompleted, time=time,time2=time2,name=activityName,description=activityDescription)
+
 
 @main.route('/choose-self-care')
 @login_required
 def chooseSelfCare():
     inspoCards = os.listdir(os.path.join(os.getcwd(), 'project/static/inspoCards/'))
+
+    selfCareDict={
+    'meditation.jpeg':'Meditate -:- Take a few minutes to sit quietly, focus on your breath, and clear your mind. You can also follow guided meditation tutorials on YouTube.',
+    'journal.jpeg':'Journal Your Thoughts -:- Write down your thoughts, feelings, or goals. Journaling helps you process emotions and gain clarity.',
+    'practice_deep_breathing.jpeg':'Practice Deep Breathing -:- Spend a few minutes focusing on slow, deep breaths to calm your mind and reduce stress.',
+    'workout.jpeg':'Do a Quick Workout -:- Engage in a short, energizing workout like a set of squats, push-ups, or a quick yoga session to boost your mood and energy levels.',
+    'devices.jpeg':'Unplug from Devices -:- Take a break from screens and social media. Enjoy some time disconnected from digital distractions.',
+    'stretch.jpeg':'Stretch Your Body -:- Gently stretch your muscles to release tension and improve flexibility, especially if youve been sitting for a while.',
+    'tea.jpeg':'Drink a Cup of Herbal Tea -:- Sip on a soothing cup of herbal tea to relax and hydrate your body.',
+    'walk.jpeg':'Take a Mindful Walk -:- Go for a walk and focus on the sights, sounds, and smells around you. Walking mindfully helps you stay present.',
+    'cook.jpeg':'Cook a Healthy Meal -:- Prepare a nutritious meal for yourself, savoring the process of cooking and eating mindfully.',
+    'read.jpeg':'Read or Listen to Something Inspirational -:- Dive into a book, podcast, or article that inspires or uplifts you.',
+    }
     print(inspoCards)
-    return render_template('chooseSelfCare.html', title="Choose Self Care",inspoCards=inspoCards)
+    return render_template('chooseSelfCare.html', title="Choose Self Care",inspoCards=inspoCards,selfCareDict=selfCareDict)
 
 @main.route('/inspiration')
 def explo():

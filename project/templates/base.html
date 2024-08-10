@@ -51,7 +51,7 @@
 
 
       {% if current_user.is_authenticated %}
-        <a href="" style="" class=" w3-button"><i class="fa fa-user fa-lg"></i></a>
+        <a href="{{url_for('main.profile')}}" style="" class=" w3-button"><i class="fa fa-user fa-lg"></i></a>
       {% endif %}
     </div>
 
