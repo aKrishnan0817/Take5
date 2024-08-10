@@ -2,7 +2,7 @@ from flask import Flask,render_template
 from flask import Blueprint
 from flask_login import login_required, current_user
 from . import db
-
+import os
 main = Blueprint('main', __name__)
 
 
@@ -24,14 +24,17 @@ def profile():
 @main.route('/choose-self-care')
 @login_required
 def chooseSelfCare():
-    return render_template('chooseSelfCare.html', title="Choose Self Care")
+    inspoCards = os.listdir(os.path.join(os.getcwd(), 'project/static/inspoCards/'))
+    print(inspoCards)
+    return render_template('chooseSelfCare.html', title="Choose Self Care",inspoCards=inspoCards)
 
 @main.route('/inspiration')
-@login_required
 def explo():
     return render_template('inspo.html', title="Explore Self Care")
 
-
+@main.route('/journal')
+def journal():
+    return render_template('journal.html', title="Journal")
 
 
 

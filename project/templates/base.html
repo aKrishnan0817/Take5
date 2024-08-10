@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='take5_logo.png')}}">
+  <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Paytone+One:400|Marcellus:400|Tinos:400,400i,700,700i|Titan+One:400|">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -54,7 +55,7 @@
       {% endif %}
     </div>
 
-    <a style=" font-family:Helvetica; position:absolute; left: 0;   right: 0;   margin-left: auto;   margin-right: auto;   width: 100px;" href="{{ url_for('main.home') }}"  class="w3-button"> <b>TAKE5</b></a>
+    <a style=" font-family:'Titan One'; position:absolute; left: 0;   right: 0;   margin-left: auto;   margin-right: auto;   width: 100px;" href="{{ url_for('main.home') }}"  class="w3-button"> <b>TAKE5</b></a>
 
 
 
@@ -63,7 +64,7 @@
     <div  class="w3-right w3-hide-small ">
 
       <a href="{{ url_for('main.explo') }}" class="w3-bar-item w3-button"><i class="fa fa-star"></i> INSPIRATION</a>
-      <a href="#work" class="w3-bar-item w3-button"><i class="fa fa-book"></i> JOURNALING</a>
+      <a href="{{ url_for('main.journal') }}" class="w3-bar-item w3-button"><i class="fa fa-book"></i> JOURNALING</a>
       <a href="#pricing" class="w3-bar-item w3-button"><i class="fa fa-trophy"></i> PROGRESS</a>
       <a href="{{ url_for('chatbot.take5_chatbot') }}" class="w3-bar-item w3-button"><i class="fa fa-info-circle"></i> TAKE5 AI</a>
     </div>
@@ -80,7 +81,7 @@
 <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
   <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
   <a href="{{ url_for('main.explo') }}" class="w3-bar-item w3-button"><i class="fa fa-star"></i> INSPIRATION</a>
-  <a href="#work" class="w3-bar-item w3-button"><i class="fa fa-book"></i> JOURNALING</a>
+  <a href="{{ url_for('main.journal') }}" class="w3-bar-item w3-button"><i class="fa fa-book"></i> JOURNALING</a>
   <a href="#pricing" class="w3-bar-item w3-button"><i class="fa fa-trophy"></i> PROGRESS</a>
   <a href="{{ url_for('chatbot.take5_chatbot') }}" class="w3-bar-item w3-button"><i class="fa fa-info-circle"></i> TAKE5 AI</a>
 </nav>
