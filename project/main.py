@@ -3,6 +3,8 @@ from flask import Blueprint
 from flask_login import login_required, current_user
 from . import db
 import os
+import datetime
+from datetime import timedelta
 main = Blueprint('main', __name__)
 
 
@@ -19,7 +21,13 @@ def mission():
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name)
+    current_user.selfCaresCompleted = "jack"
+    db.session.commit()
+    time=datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")
+    time2 = (datetime.datetime.now(datetime.UTC)+ timedelta(minutes = 5)).strftime("%Y%m%dT%H%M%SZ")
+    activityName = "Meditation"
+    activityDescription="Description"
+    return render_template('profile.html', selfCaresCompleted=current_user.selfCaresCompleted, time=time,time2=time2,name=activityName,description=activityDescription)
 
 @main.route('/choose-self-care')
 @login_required
