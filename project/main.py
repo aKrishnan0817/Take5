@@ -1,5 +1,4 @@
-from flask import Flask,render_template
-from flask import Blueprint,request
+from flask import Flask,render_template, current_app ,Blueprint,request
 from flask_login import login_required, current_user
 from . import db
 import os
@@ -39,7 +38,8 @@ def chat():
 @main.route('/choose-self-care')
 @login_required
 def chooseSelfCare():
-    inspoCards = os.listdir(os.path.join(os.getcwd(), 'project/static/inspoCards/'))
+    #inspoCards = os.listdir(os.path.join(os.getcwd(), 'project/static/inspoCards/'))
+    inspoCards = os.listdir(os.path.join(current_app.root_path, 'static/inspoCards/'))
 
     selfCareDict={
     'meditation.jpeg':'Meditate -:- Take a few minutes to sit quietly, focus on your breath, and clear your mind. You can also follow guided meditation tutorials on YouTube.',

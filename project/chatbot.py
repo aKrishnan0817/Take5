@@ -51,6 +51,14 @@ def chat():
     _,response,_ = prepare_message(input,iprompt)
     return response
 
+# J's new route to get messages with history
+@chatbot.route("/get_with_history", methods=["GET", "POST"])
+def chat_with_history():
+    data = request.get_json()
+    message_history = data["message_history"]
+
+    _,response,_ = prepare_message_with_history(message_history,iprompt)
+    return response
 
 def get_Chat_response(text):
 
@@ -69,13 +77,41 @@ def get_Chat_response(text):
         return tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
 
 
+# J's edit: A prepare_message function with a way to store the user's history
+def prepare_message_with_history(messages, inputType, functionCalling = tools,button= None):
+  for message in messages:
+      iprompt.append(message)
+  print("iprompt")
+  print(iprompt)
+  response=client.chat.completions.create(model="gpt-4o",messages=iprompt,tools=functionCalling, tool_choice="auto")
+
+  text = response.choices[0].message.content
+
+  try:
+      functionCalled = response.choices[0].message.tool_calls[0].function.name
+      print("Function called:", functionCalled)
+
+      #response=client.chat.completions.create(model="gpt-4",messages=iprompt)
+  except:
+      functionCalled = None
+      iprompt.append({"role" : "assistant" , "content" : text})
+  print(text)
+  return iprompt, text, functionCalled
 
 def prepare_message(uinput,inputType, functionCalling = tools,button= None):
   #enter the request with a microphone or type it if you wish
+  print("uinput")
+  print(uinput)
+  print("inputType")
+  print(inputType)
   if inputType == 2:
       uinput = ""
 
+  print("iprompt")
+  print(iprompt)
 
+  # J's edit: include the user text
+  iprompt.append({"role":"user", "content": uinput})
   response=client.chat.completions.create(model="gpt-4o",messages=iprompt,tools=functionCalling, tool_choice="auto")
 
   text = response.choices[0].message.content
