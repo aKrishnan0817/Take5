@@ -21,10 +21,31 @@ def mission():
 @main.route('/profile')
 @login_required
 def profile():
-    selfCaresCompleted= current_user.selfCaresCompleted
-    currentSelfCare= current_user.currentSelfCare
 
-    return render_template('profile.html', selfCaresCompleted=selfCaresCompleted,currentSelfCare=currentSelfCare)
+    selfCareDict={
+    'Meditate -:- Take a few minutes to sit quietly, focus on your breath, and clear your mind. You can also follow guided meditation tutorials on YouTube.':'meditation.jpeg',
+    'Journal Your Thoughts -:- Write down your thoughts, feelings, or goals. Journaling helps you process emotions and gain clarity.':'journal.jpeg',
+    'Practice Deep Breathing -:- Spend a few minutes focusing on slow, deep breaths to calm your mind and reduce stress.':'practice_deep_breathing.jpeg',
+    'Do a Quick Workout -:- Engage in a short, energizing workout like a set of squats, push-ups, or a quick yoga session to boost your mood and energy levels.':'workout.jpeg',
+    'Unplug from Devices -:- Take a break from screens and social media. Enjoy some time disconnected from digital distractions.':'devices.jpeg',
+    'Stretch Your Body -:- Gently stretch your muscles to release tension and improve flexibility, especially if youve been sitting for a while.':'stretch.jpeg',
+    'Drink a Cup of Herbal Tea -:- Sip on a soothing cup of herbal tea to relax and hydrate your body.':'tea.jpeg',
+    'Take a Mindful Walk -:- Go for a walk and focus on the sights, sounds, and smells around you. Walking mindfully helps you stay present.':'walk.jpeg',
+    'Cook a Healthy Meal -:- Prepare a nutritious meal for yourself, savoring the process of cooking and eating mindfully.':'cook.jpeg',
+    'Read or Listen to Something Inspirational -:- Dive into a book, podcast, or article that inspires or uplifts you.':'read.jpeg',
+    '':''
+    }
+
+
+    data = current_user.selfCaresCompleted
+    currentSelfCare= current_user.currentSelfCare
+    name=current_user.name
+    streakCount = int(data.split("_")[0].split(":")[1])
+    mentalCount =int(data.split("_")[1].split(":")[1])
+    physicalCount =int(data.split("_")[2].split(":")[1])
+    active_self_care = selfCareDict[currentSelfCare]
+    print(active_self_care)
+    return render_template('profile.html', name=name,title="Profile",active_self_care=active_self_care,mentalCount=mentalCount,physicalCount=physicalCount,streakCount=streakCount)
 
 @main.route("/choose-self-care-get", methods=["GET", "POST"])
 @login_required
