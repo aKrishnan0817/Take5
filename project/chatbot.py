@@ -3,20 +3,20 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from .models import User
 from . import db
 from .secret import apiKey
+from .secret import GOOGLE_API_KEY
 from openai import OpenAI
-
+import requests
 
 chatbot = Blueprint('chatbot', __name__)
 
 
-
 API_KEY = apiKey
 client = OpenAI(api_key=API_KEY)
-
+gemini_key = GOOGLE_API_KEY
 
 iprompt = []
-assert1={"role": "system", "content": "You are an ai mental health assistant"}
-assert2={"role": "assistant", "content": "You are to speak to the user and slowly get to know them then recmcomend a self-care activity"}
+assert1={"role": "user", "content": "You are an ai mental health assistant"}
+assert2={"role": "model", "content": "You are to speak to the user and slowly get to know them then recommend a self-care activity"}
 iprompt.append(assert1)
 iprompt.append(assert2)
 
@@ -55,10 +55,18 @@ def chat():
 @chatbot.route("/get_with_history", methods=["GET", "POST"])
 def chat_with_history():
     data = request.get_json()
-    message_history = data["message_history"]
+    print("data")
 
-    _,response,_ = prepare_message_with_history(message_history,iprompt)
-    return response
+    message_history = data["message_history"]
+    print(message_history)
+    print("running get_gemini_chat_response")
+    response = get_gemini_chat_response(message_history, system_prompt="You are an AI mental health assistant.")
+    text = response["candidates"][0]["content"]["parts"][0]["text"]
+    #`{"response":{"candidates":[{"content":{"parts":[{"text":"Hello! It's nice to hear from you. What's on your mind today? \\n"}],"role":"model"},"finishReason":"STOP","index":0,"safetyRatings":[{"category":"HARM_CATEGORY_SEXUALLY_EXPLICIT","probability":"NEGLIGIBLE"},{"category":"HARM_CATEGORY_HATE_SPEECH","probability":"NEGLIGIBLE"},{"category":"HARM_CATEGORY_HARASSMENT","probability":"NEGLIGIBLE"},{"category":"HARM_CATEGORY_DANGEROUS_CONTENT","probability":"NEGLIGIBLE"}]}],"usageMetadata":{"candidatesTokenCount":20,"promptTokenCount":14,"totalTokenCount":34}}}`
+    return jsonify({"response": text})
+    #_,response,_ = get_gemini_chat_response(message_history,iprompt)
+    #_,response,_ = prepare_message_with_history(message_history,iprompt)
+    #return response
 
 def get_Chat_response(text):
 
@@ -76,6 +84,37 @@ def get_Chat_response(text):
         # pretty print last ouput tokens from bot
         return tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
 
+
+# Prepare Gemini message with history
+def get_gemini_chat_response(message_history, system_prompt):
+
+    api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=" + gemini_key  # Replace with Gemini's endpoint
+    headers = {
+        'Content-Type': 'application/json'#,
+        #'Authorization': 'Bearer ' + gemini_key  # Use Bearer token if required
+    }
+
+    # Prepare the data payload with roles and content
+    data = {
+        "contents": [
+            {"role": "user", "parts": [{"text": system_prompt}]},
+            {"role": "model", "parts": [{"text": "Understood."}]},
+            *[
+                {"role": message["role"], "parts": [{"text": message["content"]}]}
+                for message in message_history
+            ]
+        ]
+    }
+
+    response = requests.post(api_url, headers=headers, json=data)
+
+    if response.status_code == 200:
+        gemini_output = response.json()  # Assuming structured JSON response
+        # Extract the relevant text portion from the returned 'gemini_output'
+        return gemini_output['choices'][0]['message']['content'] if 'choices' in gemini_output else gemini_output
+    else:
+        print(response.json())
+        return "Gemini API Error"
 
 # J's edit: A prepare_message function with a way to store the user's history
 def prepare_message_with_history(messages, inputType, functionCalling = tools,button= None):

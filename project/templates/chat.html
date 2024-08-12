@@ -80,8 +80,10 @@
                         type: "POST",
                         url: "/get_with_history",
                     }).done(function(data) {
-                        var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="{{ url_for('static', filename='take5_logo.png')}}" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
-                        message_history.push({role: "assistant", content: data})
+                        console.log(data);
+
+                        var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="{{ url_for('static', filename='take5_logo.png')}}" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + marked.parse(data.response) + '<span class="msg_time">' + str_time + '</span></div></div>';
+                        message_history.push({role: "model", content: data.response})
                         $("#messageFormeight").append($.parseHTML(botHtml));
                     });
 
